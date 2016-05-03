@@ -70,7 +70,7 @@ public class Matchers {
      * Evaluates to true only if ALL of the passed in matchers evaluate to true.
      */
     public static <T> org.hamcrest.Matcher<T> allOf(org.hamcrest.Matcher<? extends T>... matchers) {
-        return org.hamcrest.core.AllOf.allOf(matchers);
+        return org.hamcrest.core.AllOf.<T>allOf(matchers);
     }
 
     /**
@@ -84,7 +84,7 @@ public class Matchers {
      * Evaluates to true if ANY of the passed in matchers evaluate to true.
      */
     public static <T> org.hamcrest.Matcher<T> anyOf(org.hamcrest.Matcher<? extends T>... matchers) {
-        return org.hamcrest.core.AnyOf.anyOf(matchers);
+        return org.hamcrest.core.AnyOf.<T>anyOf(matchers);
     }
 
     /**
@@ -175,11 +175,11 @@ public class Matchers {
     }
 
     public static <T> org.hamcrest.Matcher<java.lang.Iterable<T>> hasItem(org.hamcrest.Matcher<? extends T> elementMatcher) {
-        return org.hamcrest.collection.IsCollectionContaining.hasItem(elementMatcher);
+        return org.hamcrest.collection.IsCollectionContaining.<T>hasItem(elementMatcher);
     }
 
     public static <T> org.hamcrest.Matcher<java.lang.Iterable<T>> hasItems(org.hamcrest.Matcher<? extends T>... elementMatchers) {
-        return org.hamcrest.collection.IsCollectionContaining.hasItems(elementMatchers);
+        return org.hamcrest.collection.IsCollectionContaining.<T>hasItems(elementMatchers);
     }
 
     public static <T> org.hamcrest.Matcher<java.lang.Iterable<T>> hasItems(T... elements) {
