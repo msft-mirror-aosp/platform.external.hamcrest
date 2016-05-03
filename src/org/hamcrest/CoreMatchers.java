@@ -70,7 +70,7 @@ public class CoreMatchers {
    * Evaluates to true only if ALL of the passed in matchers evaluate to true.
    */
   public static <T> org.hamcrest.Matcher<T> allOf(org.hamcrest.Matcher<? extends T>... matchers) {
-    return org.hamcrest.core.AllOf.allOf(matchers);
+    return org.hamcrest.core.AllOf.<T>allOf(matchers);
   }
 
   /**
@@ -84,7 +84,7 @@ public class CoreMatchers {
    * Evaluates to true if ANY of the passed in matchers evaluate to true.
    */
   public static <T> org.hamcrest.Matcher<T> anyOf(org.hamcrest.Matcher<? extends T>... matchers) {
-    return org.hamcrest.core.AnyOf.anyOf(matchers);
+    return org.hamcrest.core.AnyOf.<T>anyOf(matchers);
   }
 
   /**
