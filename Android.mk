@@ -39,7 +39,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 LOCAL_MODULE := hamcrest
-LOCAL_SDK_VERSION := 4
+LOCAL_SDK_VERSION := 25
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
