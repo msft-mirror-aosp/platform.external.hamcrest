@@ -11,4 +11,5 @@ what the future holds for Hamcrest given that it has had no activity since June
 conflicts in future upgrades.
 
 Local Changes:
-    None
+    Remove hamcrest-library/src/main/java/org/hamcrest/beans/ as Android does not support java.beans.
+    
