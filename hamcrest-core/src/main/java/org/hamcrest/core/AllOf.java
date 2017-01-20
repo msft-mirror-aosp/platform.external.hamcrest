@@ -1,51 +1,56 @@
 package org.hamcrest.core;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Matcher;
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
+import org.hamcrest.DiagnosingMatcher;
+import org.hamcrest.Matcher;
 
 import java.util.Arrays;
 
 /**
- * Calculates the logical conjunction of two matchers. Evaluation is
- * shortcut, so that the second matcher is not called if the first
- * matcher returns <code>false</code>.
+ * Calculates the logical conjunction of multiple matchers. Evaluation is shortcut, so
+ * subsequent matchers are not called if an earlier matcher returns <code>false</code>.
  */
-public class AllOf<T> extends BaseMatcher<T> {
-    private final Iterable<Matcher<? extends T>> matchers;
+public class AllOf<T> extends DiagnosingMatcher<T> {
 
-    public AllOf(Iterable<Matcher<? extends T>> matchers) {
+    private final Iterable<Matcher<? super T>> matchers;
+
+    public AllOf(Iterable<Matcher<? super T>> matchers) {
         this.matchers = matchers;
     }
 
-    public boolean matches(Object o) {
-        for (Matcher<? extends T> matcher : matchers) {
+    @Override
+    public boolean matches(Object o, Description mismatch) {
+        for (Matcher<? super T> matcher : matchers) {
             if (!matcher.matches(o)) {
-                return false;
+                mismatch.appendDescriptionOf(matcher).appendText(" ");
+                matcher.describeMismatch(o, mismatch);
+              return false;
             }
         }
         return true;
     }
 
+    @Override
     public void describeTo(Description description) {
-    	description.appendList("(", " and ", ")", matchers);
+        description.appendList("(", " " + "and" + " ", ")", matchers);
     }
 
     /**
-     * Evaluates to true only if ALL of the passed in matchers evaluate to true.
+     * Creates a matcher that matches if the examined object matches <b>ALL</b> of the specified matchers.
+     * For example:
+     * <pre>assertThat("myValue", allOf(startsWith("my"), containsString("Val")))</pre>
      */
-    @Factory
-    public static <T> Matcher<T> allOf(Matcher<? extends T>... matchers) {
+    public static <T> Matcher<T> allOf(Iterable<Matcher<? super T>> matchers) {
+        return new AllOf<>(matchers);
+    }
+
+    /**
+     * Creates a matcher that matches if the examined object matches <b>ALL</b> of the specified matchers.
+     * For example:
+     * <pre>assertThat("myValue", allOf(startsWith("my"), containsString("Val")))</pre>
+     */
+    @SafeVarargs
+    public static <T> Matcher<T> allOf(Matcher<? super T>... matchers) {
         return allOf(Arrays.asList(matchers));
     }
-
-    /**
-     * Evaluates to true only if ALL of the passed in matchers evaluate to true.
-     */
-    @Factory
-    public static <T> Matcher<T> allOf(Iterable<Matcher<? extends T>> matchers) {
-        return new AllOf<T>(matchers);
-    }
-
 }
