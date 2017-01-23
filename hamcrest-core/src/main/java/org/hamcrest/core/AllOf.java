@@ -5,6 +5,7 @@ import org.hamcrest.DiagnosingMatcher;
 import org.hamcrest.Matcher;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Calculates the logical conjunction of multiple matchers. Evaluation is shortcut, so
@@ -51,6 +52,6 @@ public class AllOf<T> extends DiagnosingMatcher<T> {
      */
     @SafeVarargs
     public static <T> Matcher<T> allOf(Matcher<? super T>... matchers) {
-        return allOf(Arrays.asList(matchers));
+        return allOf((List) Arrays.asList(matchers));
     }
 }

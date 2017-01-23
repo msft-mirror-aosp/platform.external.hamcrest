@@ -97,7 +97,7 @@ public class IsIterableContainingInAnyOrder<T> extends TypeSafeDiagnosingMatcher
      *     a list of matchers, each of which must be satisfied by an item provided by an examined {@link Iterable}
      */
     public static <T> Matcher<Iterable<? extends T>> containsInAnyOrder(Matcher<? super T>... itemMatchers) {
-        return containsInAnyOrder(Arrays.asList(itemMatchers));
+        return containsInAnyOrder((List) Arrays.asList(itemMatchers));
     }
 
     /**

@@ -4,6 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Calculates the logical disjunction of multiple matchers. Evaluation is shortcut, so
@@ -41,6 +42,6 @@ public class AnyOf<T> extends ShortcutCombination<T> {
      */
     @SafeVarargs
     public static <T> AnyOf<T> anyOf(Matcher<? super T>... matchers) {
-        return anyOf(Arrays.asList(matchers));
+        return anyOf((List) Arrays.asList(matchers));
     }
 }
