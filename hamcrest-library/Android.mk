@@ -1,5 +1,4 @@
-#
-# Copyright (C) 2016 The Android Open Source Project
+# Copyright (C) 2014 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,5 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#
 
-include $(call all-subdir-makefiles)
+LOCAL_PATH := $(call my-dir)
+
+# TODO: add host and hostdex jars
+
+#-------------------------------
+# build a target jar
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java)
+
+LOCAL_MODULE := hamcrest-library
+LOCAL_JAVA_LIBRARIES := hamcrest
+LOCAL_SDK_VERSION := 8
+LOCAL_MODULE_TAGS := optional
+
+include $(BUILD_STATIC_JAVA_LIBRARY)
