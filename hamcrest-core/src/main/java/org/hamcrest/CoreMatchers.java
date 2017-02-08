@@ -25,13 +25,19 @@ public class CoreMatchers {
   }
 
   /**
-   * This is a shortcut to the frequently used is(instanceOf(SomeClass.class)).
-   * 
-   * eg. assertThat(cheese, is(instanceOf(Cheddar.class)))
-   * vs assertThat(cheese, is(Cheddar.class))
+   * Provided to cause compile time error when used in preference to a possible runtime error if
+   * this was not here.
+   *
+   * <p>This method was removed upstream between Hamcrest 1.1 and 1.3 in favour of the
+   * instanceOf(Class) method. Unfortunately, existing usages of it could still compile against the
+   * {@link #is(Object)} method instead. Although not every existing usage would compile
+   * successfully it is possible that some could and that would result in a change in the runtime
+   * behavior that could be difficult to detect and fix. This change aims to turn any significant
+   * usage of this method into a compile time error.
+   *
+   * @deprecated Use instanceOf(SomeClass.class) instead.
    */
-  public static org.hamcrest.Matcher<java.lang.Object> is(java.lang.Class<?> type) {
-    return org.hamcrest.core.Is.is(type);
+  public static void is(java.lang.Class<?> type) {
   }
 
   /**
