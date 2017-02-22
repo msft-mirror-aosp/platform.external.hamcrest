@@ -1,51 +1,47 @@
 package org.hamcrest.core;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Matcher;
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
- * Calculates the logical disjunction of two matchers. Evaluation is
- * shortcut, so that the second matcher is not called if the first
- * matcher returns <code>true</code>.
+ * Calculates the logical disjunction of multiple matchers. Evaluation is shortcut, so
+ * subsequent matchers are not called if an earlier matcher returns <code>true</code>.
  */
-public class AnyOf<T> extends BaseMatcher<T> {
+public class AnyOf<T> extends ShortcutCombination<T> {
 
-    private final Iterable<Matcher<? extends T>> matchers;
-
-    public AnyOf(Iterable<Matcher<? extends T>> matchers) {
-        this.matchers = matchers;
+    public AnyOf(Iterable<Matcher<? super T>> matchers) {
+        super(matchers);
     }
 
+    @Override
     public boolean matches(Object o) {
-        for (Matcher<? extends T> matcher : matchers) {
-            if (matcher.matches(o)) {
-                return true;
-            }
-        }
-        return false;
+        return matches(o, true);
     }
 
+    @Override
     public void describeTo(Description description) {
-    	description.appendList("(", " or ", ")", matchers);
+        describeTo(description, "or");
     }
 
     /**
-     * Evaluates to true if ANY of the passed in matchers evaluate to true.
+     * Creates a matcher that matches if the examined object matches <b>ANY</b> of the specified matchers.
+     * For example:
+     * <pre>assertThat("myValue", anyOf(startsWith("foo"), containsString("Val")))</pre>
      */
-    @Factory
-    public static <T> Matcher<T> anyOf(Matcher<? extends T>... matchers) {
-        return anyOf(Arrays.asList(matchers));
+    public static <T> AnyOf<T> anyOf(Iterable<Matcher<? super T>> matchers) {
+        return new AnyOf<>(matchers);
     }
-
+    
     /**
-     * Evaluates to true if ANY of the passed in matchers evaluate to true.
+     * Creates a matcher that matches if the examined object matches <b>ANY</b> of the specified matchers.
+     * For example:
+     * <pre>assertThat("myValue", anyOf(startsWith("foo"), containsString("Val")))</pre>
      */
-    @Factory
-    public static <T> Matcher<T> anyOf(Iterable<Matcher<? extends T>> matchers) {
-        return new AnyOf<T>(matchers);
+    @SafeVarargs
+    public static <T> AnyOf<T> anyOf(Matcher<? super T>... matchers) {
+      return anyOf((List) Arrays.asList(matchers));
     }
 }

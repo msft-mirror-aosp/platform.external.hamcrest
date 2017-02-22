@@ -2,18 +2,23 @@ package org.hamcrest.collection;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Arrays;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 
+/**
+ * Matches if an array contains an item satisfying a nested matcher.
+ */
 public class IsArrayContaining<T> extends TypeSafeMatcher<T[]> {
+    private final Matcher<? super T> elementMatcher;
 
-    private final Matcher<T> elementMatcher;
-
-    public IsArrayContaining(Matcher<T> elementMatcher) {
+    public IsArrayContaining(Matcher<? super T> elementMatcher) {
         this.elementMatcher = elementMatcher;
     }
 
+    @Override
     public boolean matchesSafely(T[] array) {
         for (T item : array) {
             if (elementMatcher.matches(item)) {
@@ -22,21 +27,45 @@ public class IsArrayContaining<T> extends TypeSafeMatcher<T[]> {
         }
         return false;
     }
-
-    public void describeTo(Description description) {
-        description
-        	.appendText("an array containing ")
-        	.appendDescriptionOf(elementMatcher);
+    
+    @Override
+    public void describeMismatchSafely(T[] item, Description mismatchDescription) {
+        super.describeMismatch(Arrays.asList(item), mismatchDescription);
     }
 
-    @Factory
-    public static <T> Matcher<T[]> hasItemInArray(Matcher<T> elementMatcher) {
+    @Override
+    public void describeTo(Description description) {
+        description
+            .appendText("an array containing ")
+            .appendDescriptionOf(elementMatcher);
+    }
+
+    /**
+     * Creates a matcher for arrays that matches when the examined array contains at least one item
+     * that is matched by the specified <code>elementMatcher</code>.  Whilst matching, the traversal
+     * of the examined array will stop as soon as a matching element is found.
+     * For example:
+     * <pre>assertThat(new String[] {"foo", "bar"}, hasItemInArray(startsWith("ba")))</pre>
+     * 
+     * @param elementMatcher
+     *     the matcher to apply to elements in examined arrays
+     */
+    public static <T> Matcher<T[]> hasItemInArray(Matcher<? super T> elementMatcher) {
         return new IsArrayContaining<T>(elementMatcher);
     }
 
-    @Factory
+    /**
+     * A shortcut to the frequently used <code>hasItemInArray(equalTo(x))</code>.
+     * For example:
+     * <pre>assertThat(hasItemInArray(x))</pre>
+     * instead of:
+     * <pre>assertThat(hasItemInArray(equalTo(x)))</pre>
+     * 
+     * @param element
+     *     the element that should be present in examined arrays
+     */
     public static <T> Matcher<T[]> hasItemInArray(T element) {
-        return hasItemInArray(equalTo(element));
+        Matcher<? super T> matcher = equalTo(element);
+        return IsArrayContaining.<T>hasItemInArray(matcher);
     }
-
 }
