@@ -1,10 +1,7 @@
-/*  Copyright (c) 2000-2006 hamcrest.org
- */
 package org.hamcrest.text;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
 /**
@@ -12,7 +9,7 @@ import org.hamcrest.TypeSafeMatcher;
  */
 public class IsEqualIgnoringCase extends TypeSafeMatcher<String> {
 
-    // TODO: Replace String with CharSequence to allow for easy interopability between
+    // TODO: Replace String with CharSequence to allow for easy interoperability between
     //       String, StringBuffer, StringBuilder, CharBuffer, etc (joe).
 
     private final String string;
@@ -24,19 +21,34 @@ public class IsEqualIgnoringCase extends TypeSafeMatcher<String> {
         this.string = string;
     }
 
+    @Override
     public boolean matchesSafely(String item) {
         return string.equalsIgnoreCase(item);
     }
 
+    @Override
+    public void describeMismatchSafely(String item, Description mismatchDescription) {
+      mismatchDescription.appendText("was ").appendValue(item);
+    }
+    
+    @Override
     public void describeTo(Description description) {
-        description.appendText("eqIgnoringCase(")
+        description.appendText("equalToIgnoringCase(")
                 .appendValue(string)
                 .appendText(")");
     }
 
-    @Factory
-    public static Matcher<String> equalToIgnoringCase(String string) {
-        return new IsEqualIgnoringCase(string);
+    /**
+     * Creates a matcher of {@link String} that matches when the examined string is equal to
+     * the specified expectedString, ignoring case.
+     * For example:
+     * <pre>assertThat("Foo", equalToIgnoringCase("FOO"))</pre>
+     * 
+     * @param expectedString
+     *     the expected value of matched strings
+     */
+    public static Matcher<String> equalToIgnoringCase(String expectedString) {
+        return new IsEqualIgnoringCase(expectedString);
     }
 
 }
