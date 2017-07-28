@@ -16,7 +16,14 @@
 
 LOCAL_PATH := $(call my-dir)
 
-# TODO: add host and hostdex jars
+# build for the host JVM
+#-----------------------
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES := $(call all-java-files-under, src/main/java)
+LOCAL_MODULE := hamcrest-library-host
+LOCAL_JAVA_LIBRARIES := hamcrest-host
+LOCAL_MODULE_TAGS := optional
+include $(BUILD_HOST_JAVA_LIBRARY)
 
 #-------------------------------
 # build a target jar
